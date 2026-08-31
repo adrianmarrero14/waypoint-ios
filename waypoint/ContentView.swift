@@ -6,11 +6,17 @@ struct ContentView: View {
     @Environment(ModuleSettings.self) private var moduleSettings
     @Environment(LanguageSettings.self) private var languageSettings
     @Environment(AppearanceSettings.self) private var appearanceSettings
+    @Environment(AppRouter.self) private var router
+    @Environment(NotificationScheduler.self) private var notificationScheduler
+
+    @AppStorage("waypoint.hasSeenNotificationOnboarding")
+    private var hasSeenNotificationOnboarding = false
+    @State private var isNotificationOnboardingPresented = false
 
     var body: some View {
-        TabView {
+        TabView(selection: Bindable(router).selectedModuleID) {
             ForEach(ModuleRegistry.all.filter { moduleSettings.isEnabled($0.id) }) { module in
-                Tab {
+                Tab(value: module.id) {
                     module.makeRootView()
                 } label: {
                     Label {
@@ -20,7 +26,7 @@ struct ContentView: View {
                     }
                 }
             }
-            Tab {
+            Tab(value: "settings") {
                 SettingsView()
             } label: {
                 Label("settings.tab.title", systemImage: "gearshape")
@@ -30,6 +36,16 @@ struct ContentView: View {
         .environment(\.locale, languageSettings.localeOverride ?? .autoupdatingCurrent)
         .id(languageSettings.language)
         .preferredColorScheme(appearanceSettings.colorScheme)
+        .task {
+            if !hasSeenNotificationOnboarding {
+                hasSeenNotificationOnboarding = true
+                isNotificationOnboardingPresented = true
+            }
+        }
+        .sheet(isPresented: $isNotificationOnboardingPresented) {
+            NotificationOnboardingSheet(scheduler: notificationScheduler)
+                .presentationDetents([.medium])
+        }
     }
 
     /// LocalizedStringResource resolves against the app's preferred languages,
@@ -48,4 +64,6 @@ struct ContentView: View {
         .environment(ModuleSettings())
         .environment(LanguageSettings())
         .environment(AppearanceSettings())
+        .environment(AppRouter())
+        .environment(NotificationScheduler())
 }
