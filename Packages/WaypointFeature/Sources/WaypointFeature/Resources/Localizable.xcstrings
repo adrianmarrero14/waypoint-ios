@@ -1,24 +1,24 @@
 {
   "sourceLanguage" : "es",
   "strings" : {
-    "module.logbook.name" : {
+    "module.waypoint.name" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Logbook"
+            "value" : "Waypoint"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bitácora"
+            "value" : "Waypoint"
           }
         }
       }
     },
-    "module.logbook.placeholder" : {
+    "module.waypoint.placeholder" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {

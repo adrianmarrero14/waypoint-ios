@@ -2,11 +2,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "LogbookFeature",
+    name: "WaypointFeature",
     defaultLocalization: "es",
     platforms: [.iOS(.v26), .macOS(.v26), .visionOS(.v26)],
     products: [
-        .library(name: "LogbookFeature", targets: ["LogbookFeature"])
+        .library(name: "WaypointFeature", targets: ["WaypointFeature"])
     ],
     dependencies: [
         .package(path: "../WaypointCore"),
@@ -14,7 +14,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "LogbookFeature",
+            name: "WaypointFeature",
             dependencies: [
                 "WaypointCore",
                 .product(name: "DesignSystem", package: "DesignSystem"),

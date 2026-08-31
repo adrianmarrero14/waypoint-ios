@@ -10,7 +10,7 @@
 		CAFE0000000000000000E000 /* WaypointCore in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE0000000000000000D000 /* WaypointCore */; };
 		CAFE0000000000000000E001 /* HabitsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE0000000000000000D001 /* HabitsFeature */; };
 		CAFE0000000000000000E002 /* TasksFeature in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE0000000000000000D002 /* TasksFeature */; };
-		CAFE0000000000000000E003 /* LogbookFeature in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE0000000000000000D003 /* LogbookFeature */; };
+		CAFE0000000000000000E003 /* WaypointFeature in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE0000000000000000D003 /* WaypointFeature */; };
 		CAFE0000000000000000E004 /* DesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE0000000000000000D004 /* DesignSystem */; };
 /* End PBXBuildFile section */
 
@@ -34,7 +34,7 @@
 				CAFE0000000000000000E000 /* WaypointCore in Frameworks */,
 				CAFE0000000000000000E001 /* HabitsFeature in Frameworks */,
 				CAFE0000000000000000E002 /* TasksFeature in Frameworks */,
-				CAFE0000000000000000E003 /* LogbookFeature in Frameworks */,
+				CAFE0000000000000000E003 /* WaypointFeature in Frameworks */,
 				CAFE0000000000000000E004 /* DesignSystem in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -81,7 +81,7 @@
 				CAFE0000000000000000D000 /* WaypointCore */,
 				CAFE0000000000000000D001 /* HabitsFeature */,
 				CAFE0000000000000000D002 /* TasksFeature */,
-				CAFE0000000000000000D003 /* LogbookFeature */,
+				CAFE0000000000000000D003 /* WaypointFeature */,
 				CAFE0000000000000000D004 /* DesignSystem */,
 			);
 			productName = waypoint;
@@ -117,7 +117,7 @@
 				CAFE0000000000000000F000 /* XCLocalSwiftPackageReference "Packages/WaypointCore" */,
 				CAFE0000000000000000F001 /* XCLocalSwiftPackageReference "Packages/HabitsFeature" */,
 				CAFE0000000000000000F002 /* XCLocalSwiftPackageReference "Packages/TasksFeature" */,
-				CAFE0000000000000000F003 /* XCLocalSwiftPackageReference "Packages/LogbookFeature" */,
+				CAFE0000000000000000F003 /* XCLocalSwiftPackageReference "Packages/WaypointFeature" */,
 				CAFE0000000000000000F004 /* XCLocalSwiftPackageReference "Packages/DesignSystem" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -391,9 +391,9 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/TasksFeature;
 		};
-		CAFE0000000000000000F003 /* XCLocalSwiftPackageReference "Packages/LogbookFeature" */ = {
+		CAFE0000000000000000F003 /* XCLocalSwiftPackageReference "Packages/WaypointFeature" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = Packages/LogbookFeature;
+			relativePath = Packages/WaypointFeature;
 		};
 		CAFE0000000000000000F004 /* XCLocalSwiftPackageReference "Packages/DesignSystem" */ = {
 			isa = XCLocalSwiftPackageReference;
@@ -414,9 +414,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = TasksFeature;
 		};
-		CAFE0000000000000000D003 /* LogbookFeature */ = {
+		CAFE0000000000000000D003 /* WaypointFeature */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = LogbookFeature;
+			productName = WaypointFeature;
 		};
 		CAFE0000000000000000D004 /* DesignSystem */ = {
 			isa = XCSwiftPackageProductDependency;

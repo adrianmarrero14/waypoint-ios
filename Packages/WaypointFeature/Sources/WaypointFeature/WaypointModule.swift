@@ -1,14 +1,14 @@
 import SwiftUI
 import WaypointCore
 
-public enum LogbookModule {
+public enum WaypointModule {
     public static let descriptor = ModuleDescriptor(
-        id: "logbook",
+        id: "waypoint",
         name: LocalizedStringResource(
-            "module.logbook.name",
+            "module.waypoint.name",
             bundle: .atURL(Bundle.module.bundleURL)
         ),
-        systemImage: "book.closed",
-        makeRootView: { AnyView(LogbookRootView()) }
+        systemImage: "paperplane.circle",
+        makeRootView: { AnyView(WaypointRootView()) }
     )
 }
