@@ -1,48 +1,55 @@
 # Waypoint iOS
 
-App iOS de Waypoint (SwiftUI, arquitectura modular con paquetes SPM locales en `Packages/`).
+Waypoint iOS app (SwiftUI, modular architecture with local SPM packages in `Packages/`).
 
-Toda la UI debe construirse con el paquete `Packages/DesignSystem`: colores `Color.wp*`, tipografías `Font.fredoka(...)`/`Font.nunito(...)` y escala `Font.wp*`, botones `.buttonStyle(.waypointPrimary/.waypointSecondary/.waypointTertiary)`, tarjetas `.waypointCard()`, `WaypointTag`, `WaveShape` y `Bubble`. No usar colores o fuentes fuera del sistema.
+## Language conventions
 
-## Branding (fuente: `../waypoint_branding/Waypoint Branding.dc.html`)
+- Everything is written in English: code, comments, docs, commit messages, and this file.
+- UI text is always localized in Spanish and English. Never hardcode user-facing strings: use String Catalogs (`Localizable.xcstrings`) with keys like `module.tasks.name`, source language `es`, and a translated `en` entry for every key. In views, load with `String(localized:bundle:)` / `Text(_:bundle:)` using `.module` for package resources.
 
-Toda UI que se cree o modifique debe seguir estas reglas de marca. La identidad es la ballena de Waypoint: amigable, redonda y optimista, con contorno navy grueso — todos los elementos heredan ese estilo.
+## UI / Design system
 
-### Paleta (solo estos colores, ninguno fuera de esta familia)
+All UI must be built with the `Packages/DesignSystem` package: colors `Color.wp*`, fonts `Font.fredoka(...)`/`Font.nunito(...)` and the `Font.wp*` scale, buttons `.buttonStyle(.waypointPrimary/.waypointSecondary/.waypointTertiary)`, cards `.waypointCard()`, `WaypointTag`, `WaveShape` and `Bubble`. No colors or fonts outside the system.
 
-| Nombre | Hex | Uso |
+## Branding (source: `../waypoint_branding/Waypoint Branding.dc.html`)
+
+All UI must follow these brand rules. The identity is the Waypoint whale: friendly, round and optimistic, with a thick navy outline — every element inherits that style.
+
+### Palette (only these colors, none outside this family)
+
+| Name | Hex | Use |
 |---|---|---|
-| Deep Navy | `#1E2B85` | Contornos y texto |
-| Ocean Blue | `#2B8CFF` | Color primario (acciones, acentos) |
-| Whale Blue | `#45AEF5` | Cuerpo de la ballena, estados hover/secundarios |
-| Splash Sky | `#8ED8F8` | Detalles y rellenos suaves |
-| Foam | `#F4FBFF` | Fondos claros |
+| Deep Navy | `#1E2B85` | Outlines and text |
+| Ocean Blue | `#2B8CFF` | Primary color (actions, accents) |
+| Whale Blue | `#45AEF5` | Whale's body, hover/secondary states |
+| Splash Sky | `#8ED8F8` | Details and soft fills |
+| Foam | `#F4FBFF` | Light backgrounds |
 
-Colores de apoyo vistos en la guía: `#DCEBFA` (bordes suaves), `#4A57A0` (texto secundario), `#7B86C2` (texto terciario), `#CFE9FF` (texto claro sobre azul), `#EAF5FF` (fondo de tags).
+Supporting tones from the guide: `#DCEBFA` (soft borders), `#4A57A0` (secondary text), `#7B86C2` (tertiary text), `#CFE9FF` (light text on blue), `#EAF5FF` (tag fills).
 
-Ratio de uso aproximado: Foam 35% · Ocean Blue 30% · Whale Blue 15% · Splash Sky 10% · Deep Navy 10%.
+Approximate usage ratio: Foam 35% · Ocean Blue 30% · Whale Blue 15% · Splash Sky 10% · Deep Navy 10%.
 
-### Tipografía
+### Typography
 
-- **Titulares: Fredoka** (pesos 500–700). Siempre en navy o blanco. Nunca en tiradas largas de mayúsculas.
-- **Cuerpo: Nunito** (400 para párrafos, 700–800 para labels y botones). Mínimo 14 pt en pantalla.
-- Escala: H1 48/56 · H2 32/40 · Body 16/26 · Label 13 (uppercase, letter-spacing amplio, Ocean Blue).
-- Ambas van incluidas como TTF variables en `Packages/DesignSystem` y se registran automáticamente al usar `Font.fredoka(...)` / `Font.nunito(...)` (o llamando a `WaypointFont.register()`).
+- **Headlines: Fredoka** (weights 500–700). Always navy or white. Never long all-caps runs.
+- **Body: Nunito** (400 for paragraphs, 700–800 for labels and buttons). Minimum 14 pt on screen.
+- Scale: H1 48/56 · H2 32/40 · Body 16/26 · Label 13 (uppercase, wide letter-spacing, Ocean Blue). On iOS use the adapted `Font.wp*` scale (34/28/20/16/14/13).
+- Both ship as variable TTFs in `Packages/DesignSystem` and register automatically when using `Font.fredoka(...)` / `Font.nunito(...)` (or by calling `WaypointFont.register()`).
 
-### Elementos gráficos y UI
+### Graphic elements & UI
 
-- Contornos navy gruesos (equivalente a 2–3 pt) y esquinas muy redondeadas en tarjetas y controles; botones y tags en forma de píldora (radio completo).
-- Los botones se sienten "dibujados": borde navy de 3 pt + sombra dura inferior navy (offset y ~4, sin blur) que se hunde al pulsar.
-  - Primario: fondo Ocean Blue, texto blanco. Secundario: fondo blanco, texto navy. Terciario: fondo Splash Sky, texto navy.
-- Tarjetas: fondo blanco, borde `#DCEBFA` de 2 pt, radio ~20, sombra suave `rgba(30,43,133,0.12)`.
-- Motivos: olas (curvas suaves) y burbujas — las burbujas siempre con contorno navy.
+- Thick navy outlines (2–3 pt) and very rounded corners on cards and controls; pill-shaped buttons and tags (full radius).
+- Buttons feel "drawn": 3 pt navy border + hard navy bottom shadow (offset y ~4, no blur) that sinks when pressed.
+  - Primary: Ocean Blue fill, white text. Secondary: white fill, navy text. Tertiary: Splash Sky fill, navy text.
+- Cards: white fill, 2 pt `#DCEBFA` border, ~20 radius, soft `rgba(30,43,133,0.12)` shadow.
+- Motifs: waves (smooth curves) and bubbles — bubbles always with a navy outline.
 
 ### Logo
 
-- Vive siempre dentro de su campo azul, recortado como círculo o cuadrado redondeado, con borde navy (o Splash Sky/blanco sobre fondos oscuros).
-- Espacio libre alrededor: al menos la mitad de su diámetro.
-- No estirar, rotar ni recolorear la ballena; no quitar el contorno navy; no ponerlo sobre fondos que compitan con su azul.
+- Always lives inside its blue field, cropped as a circle or rounded square, with a navy border (or Splash Sky/white on dark backgrounds).
+- Clear space: at least half its diameter.
+- Don't stretch, rotate or recolor the whale; don't remove the navy outline; don't place it on backgrounds that fight with its blue.
 
-### Tono
+### Tone
 
-Calmado, amigable y optimista; metáforas de océano (olas, flow, splash). Ej.: "Find your flow, one wave at a time".
+Calm, friendly and optimistic; ocean metaphors (waves, flow, splash). E.g. "Find your flow, one wave at a time".
