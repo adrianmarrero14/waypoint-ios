@@ -6,6 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		CAFE0000000000000000E000 /* WaypointCore in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE0000000000000000D000 /* WaypointCore */; };
+		CAFE0000000000000000E001 /* HabitsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE0000000000000000D001 /* HabitsFeature */; };
+		CAFE0000000000000000E002 /* TasksFeature in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE0000000000000000D002 /* TasksFeature */; };
+		CAFE0000000000000000E003 /* LogbookFeature in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE0000000000000000D003 /* LogbookFeature */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		3ADC18023045939F003B729F /* waypoint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = waypoint.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +30,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CAFE0000000000000000E000 /* WaypointCore in Frameworks */,
+				CAFE0000000000000000E001 /* HabitsFeature in Frameworks */,
+				CAFE0000000000000000E002 /* TasksFeature in Frameworks */,
+				CAFE0000000000000000E003 /* LogbookFeature in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +76,10 @@
 			);
 			name = waypoint;
 			packageProductDependencies = (
+				CAFE0000000000000000D000 /* WaypointCore */,
+				CAFE0000000000000000D001 /* HabitsFeature */,
+				CAFE0000000000000000D002 /* TasksFeature */,
+				CAFE0000000000000000D003 /* LogbookFeature */,
 			);
 			productName = waypoint;
 			productReference = 3ADC18023045939F003B729F /* waypoint.app */;
@@ -86,14 +101,21 @@
 				};
 			};
 			buildConfigurationList = 3ADC17FD3045939F003B729F /* Build configuration list for PBXProject "waypoint" */;
-			developmentRegion = en;
+			developmentRegion = es;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				es,
 				Base,
 			);
 			mainGroup = 3ADC17F93045939F003B729F;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				CAFE0000000000000000F000 /* XCLocalSwiftPackageReference "Packages/WaypointCore" */,
+				CAFE0000000000000000F001 /* XCLocalSwiftPackageReference "Packages/HabitsFeature" */,
+				CAFE0000000000000000F002 /* XCLocalSwiftPackageReference "Packages/TasksFeature" */,
+				CAFE0000000000000000F003 /* XCLocalSwiftPackageReference "Packages/LogbookFeature" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3ADC18033045939F003B729F /* Products */;
 			projectDirPath = "";
@@ -345,6 +367,44 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		CAFE0000000000000000F000 /* XCLocalSwiftPackageReference "Packages/WaypointCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/WaypointCore;
+		};
+		CAFE0000000000000000F001 /* XCLocalSwiftPackageReference "Packages/HabitsFeature" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/HabitsFeature;
+		};
+		CAFE0000000000000000F002 /* XCLocalSwiftPackageReference "Packages/TasksFeature" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/TasksFeature;
+		};
+		CAFE0000000000000000F003 /* XCLocalSwiftPackageReference "Packages/LogbookFeature" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/LogbookFeature;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CAFE0000000000000000D000 /* WaypointCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WaypointCore;
+		};
+		CAFE0000000000000000D001 /* HabitsFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = HabitsFeature;
+		};
+		CAFE0000000000000000D002 /* TasksFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TasksFeature;
+		};
+		CAFE0000000000000000D003 /* LogbookFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LogbookFeature;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3ADC17FA3045939F003B729F /* Project object */;
 }
