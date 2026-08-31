@@ -11,6 +11,7 @@
 		CAFE0000000000000000E001 /* HabitsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE0000000000000000D001 /* HabitsFeature */; };
 		CAFE0000000000000000E002 /* TasksFeature in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE0000000000000000D002 /* TasksFeature */; };
 		CAFE0000000000000000E003 /* LogbookFeature in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE0000000000000000D003 /* LogbookFeature */; };
+		CAFE0000000000000000E004 /* DesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE0000000000000000D004 /* DesignSystem */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 				CAFE0000000000000000E001 /* HabitsFeature in Frameworks */,
 				CAFE0000000000000000E002 /* TasksFeature in Frameworks */,
 				CAFE0000000000000000E003 /* LogbookFeature in Frameworks */,
+				CAFE0000000000000000E004 /* DesignSystem in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +82,7 @@
 				CAFE0000000000000000D001 /* HabitsFeature */,
 				CAFE0000000000000000D002 /* TasksFeature */,
 				CAFE0000000000000000D003 /* LogbookFeature */,
+				CAFE0000000000000000D004 /* DesignSystem */,
 			);
 			productName = waypoint;
 			productReference = 3ADC18023045939F003B729F /* waypoint.app */;
@@ -115,6 +118,7 @@
 				CAFE0000000000000000F001 /* XCLocalSwiftPackageReference "Packages/HabitsFeature" */,
 				CAFE0000000000000000F002 /* XCLocalSwiftPackageReference "Packages/TasksFeature" */,
 				CAFE0000000000000000F003 /* XCLocalSwiftPackageReference "Packages/LogbookFeature" */,
+				CAFE0000000000000000F004 /* XCLocalSwiftPackageReference "Packages/DesignSystem" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3ADC18033045939F003B729F /* Products */;
@@ -385,6 +389,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/LogbookFeature;
 		};
+		CAFE0000000000000000F004 /* XCLocalSwiftPackageReference "Packages/DesignSystem" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/DesignSystem;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -403,6 +411,10 @@
 		CAFE0000000000000000D003 /* LogbookFeature */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LogbookFeature;
+		};
+		CAFE0000000000000000D004 /* DesignSystem */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DesignSystem;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
