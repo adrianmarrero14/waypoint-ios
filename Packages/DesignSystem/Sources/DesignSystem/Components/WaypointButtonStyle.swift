@@ -1,14 +1,14 @@
 import SwiftUI
 
-/// The brand's "drawn" pill button: thick navy outline and a hard navy
-/// drop shadow that the button sinks into when pressed.
+/// The brand's "drawn" pill button: thick outline (navy in light mode,
+/// Splash Sky in dark mode) and a hard drop shadow the button sinks into.
 public struct WaypointButtonStyle: ButtonStyle {
     public enum Variant {
         /// Ocean Blue fill, white text — the main action.
         case primary
-        /// White fill, navy text.
+        /// Surface fill (white / transparent), primary text color.
         case secondary
-        /// Splash Sky fill, navy text.
+        /// Splash Sky fill, navy/midnight text.
         case tertiary
     }
 
@@ -37,8 +37,8 @@ public struct WaypointButtonStyle: ButtonStyle {
             .padding(.horizontal, size.horizontalPadding)
             .padding(.vertical, size.verticalPadding)
             .background(fill, in: .capsule)
-            .overlay(Capsule().strokeBorder(Color.wpDeepNavy, lineWidth: 3))
-            .background(Capsule().fill(Color.wpDeepNavy).offset(y: pressed ? 1 : 4))
+            .overlay(Capsule().strokeBorder(Color.wpOutline, lineWidth: 3))
+            .background(Capsule().fill(Color.wpButtonShadow).offset(y: pressed ? 1 : 4))
             .offset(y: pressed ? 3 : 0)
             .animation(.easeOut(duration: 0.08), value: pressed)
     }
@@ -46,7 +46,7 @@ public struct WaypointButtonStyle: ButtonStyle {
     private var fill: Color {
         switch variant {
         case .primary: .wpOceanBlue
-        case .secondary: .white
+        case .secondary: .wpAdaptive(light: 0xFFFFFF, dark: 0x000000, darkAlpha: 0)
         case .tertiary: .wpSplashSky
         }
     }
@@ -54,7 +54,8 @@ public struct WaypointButtonStyle: ButtonStyle {
     private var foreground: Color {
         switch variant {
         case .primary: .white
-        case .secondary, .tertiary: .wpDeepNavy
+        case .secondary: .wpTextPrimary
+        case .tertiary: .wpOnSplash
         }
     }
 }
@@ -76,5 +77,5 @@ public extension ButtonStyle where Self == WaypointButtonStyle {
         Button("Compact") {}.buttonStyle(.waypoint(.primary, size: .compact))
     }
     .padding(40)
-    .background(Color.wpFoam)
+    .background(Color.wpBackground)
 }

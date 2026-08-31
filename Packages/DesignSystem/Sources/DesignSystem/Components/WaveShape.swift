@@ -36,7 +36,8 @@ public struct WaveShape: Shape {
     }
 }
 
-/// Brand bubble: a filled circle that always carries a navy outline.
+/// Brand bubble: a filled circle that always carries an outline —
+/// navy in light mode, midnight on dark surfaces.
 public struct Bubble: View {
     let diameter: CGFloat
     let fill: Color
@@ -49,7 +50,7 @@ public struct Bubble: View {
     public var body: some View {
         Circle()
             .fill(fill)
-            .strokeBorder(Color.wpDeepNavy, lineWidth: 3)
+            .strokeBorder(Color.wpOnSplash, lineWidth: 3)
             .frame(width: diameter, height: diameter)
     }
 }
@@ -73,6 +74,6 @@ public struct Bubble: View {
         WaveShape(closed: true)
             .fill(Color.wpOceanBlue)
             .frame(height: 46)
-            .background(Color.wpFoam)
+            .background(Color.wpBackground)
     }
 }

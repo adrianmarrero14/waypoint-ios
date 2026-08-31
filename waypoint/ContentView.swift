@@ -4,6 +4,8 @@ import WaypointCore
 
 struct ContentView: View {
     @Environment(ModuleSettings.self) private var moduleSettings
+    @Environment(LanguageSettings.self) private var languageSettings
+    @Environment(AppearanceSettings.self) private var appearanceSettings
 
     var body: some View {
         TabView {
@@ -12,7 +14,7 @@ struct ContentView: View {
                     module.makeRootView()
                 } label: {
                     Label {
-                        Text(module.name)
+                        Text(localizedName(of: module))
                     } icon: {
                         Image(systemName: module.systemImage)
                     }
@@ -25,10 +27,25 @@ struct ContentView: View {
             }
         }
         .tint(Color.wpOceanBlue)
+        .environment(\.locale, languageSettings.localeOverride ?? .autoupdatingCurrent)
+        .id(languageSettings.language)
+        .preferredColorScheme(appearanceSettings.colorScheme)
+    }
+
+    /// LocalizedStringResource resolves against the app's preferred languages,
+    /// not the environment locale, so the override must be set on the resource.
+    private func localizedName(of module: ModuleDescriptor) -> LocalizedStringResource {
+        var name = module.name
+        if let locale = languageSettings.localeOverride {
+            name.locale = locale
+        }
+        return name
     }
 }
 
 #Preview {
     ContentView()
         .environment(ModuleSettings())
+        .environment(LanguageSettings())
+        .environment(AppearanceSettings())
 }

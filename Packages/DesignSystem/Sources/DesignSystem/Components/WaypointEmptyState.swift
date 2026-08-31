@@ -18,16 +18,16 @@ public struct WaypointEmptyState: View {
             ZStack {
                 Circle()
                     .fill(Color.wpSplashSky)
-                    .strokeBorder(Color.wpDeepNavy, lineWidth: 3)
+                    .strokeBorder(Color.wpOnSplash, lineWidth: 3)
                 Image(systemName: systemImage)
                     .font(.system(size: 30, weight: .semibold))
-                    .foregroundStyle(Color.wpDeepNavy)
+                    .foregroundStyle(Color.wpOnSplash)
             }
             .frame(width: 76, height: 76)
 
             title
                 .font(.fredoka(24))
-                .foregroundStyle(Color.wpDeepNavy)
+                .foregroundStyle(Color.wpTextPrimary)
 
             message
                 .font(.wpBody)
@@ -40,9 +40,9 @@ public struct WaypointEmptyState: View {
         .padding(24)
         .background {
             ZStack(alignment: .bottom) {
-                Color.wpFoam
+                Color.wpBackground
                 WaveShape(wavelength: 150, amplitude: 20, closed: true)
-                    .fill(Color.wpSplashSky.opacity(0.5))
+                    .fill(Color.wpWaveFill)
                     .frame(height: 110)
             }
             .ignoresSafeArea()

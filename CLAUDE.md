@@ -11,7 +11,9 @@ Waypoint iOS app (SwiftUI, modular architecture with local SPM packages in `Pack
 
 All UI must be built with the `Packages/DesignSystem` package: colors `Color.wp*`, fonts `Font.fredoka(...)`/`Font.nunito(...)` and the `Font.wp*` scale, buttons `.buttonStyle(.waypointPrimary/.waypointSecondary/.waypointTertiary)`, cards `.waypointCard()`, `WaypointTag`, `WaveShape` and `Bubble`. No colors or fonts outside the system.
 
-## Branding (source: `../waypoint_branding/Waypoint Branding.dc.html`)
+For backgrounds, surfaces, text and outlines always use the **semantic tokens** (`Color.wpBackground`, `.wpSurface`, `.wpSurfaceBorder`, `.wpOutline`, `.wpTextPrimary/Secondary/Tertiary`, `.wpLabelAccent`, `.wpOnSplash`, `.wpButtonShadow`, `.wpCardShadow`, `.wpWaveFill`) — they adapt to light/dark automatically. Fixed palette colors (`.wpOceanBlue`, `.wpSplashSky`, …) are for cases where the color is the same in both modes. The user's theme choice (system/light/dark) lives in `AppearanceSettings` (WaypointCore) and is applied via `preferredColorScheme` in `ContentView`.
+
+## Branding (source: `../waypoint_branding_darkmode/` — light and dark guides)
 
 All UI must follow these brand rules. The identity is the Waypoint whale: friendly, round and optimistic, with a thick navy outline — every element inherits that style.
 
@@ -28,6 +30,22 @@ All UI must follow these brand rules. The identity is the Waypoint whale: friend
 Supporting tones from the guide: `#DCEBFA` (soft borders), `#4A57A0` (secondary text), `#7B86C2` (tertiary text), `#CFE9FF` (light text on blue), `#EAF5FF` (tag fills).
 
 Approximate usage ratio: Foam 35% · Ocean Blue 30% · Whale Blue 15% · Splash Sky 10% · Deep Navy 10%.
+
+### Dark mode (same family, swapped roles)
+
+| Role | Light | Dark |
+|---|---|---|
+| Ground | Foam `#F4FBFF` | Midnight `#0E1330` |
+| Surface (cards) | White | `#161C40` |
+| Surface border | `#DCEBFA` | `#262E5C` |
+| Drawn outline | Deep Navy | Splash Sky |
+| Primary text | Deep Navy | Near-white `#E8ECFF` |
+| Secondary / tertiary text | `#4A57A0` / `#7B86C2` | `#A9B2E0` / `#8891C7` |
+| Label accent | Ocean Blue | Whale Blue |
+| Button hard shadow | Deep Navy | Near-black `#0A0E24` |
+| Card shadow | navy 12% | black 35% |
+
+Dark usage ratio: Midnight 40% · Deep Navy 20% · Ocean Blue 20% · Whale Blue 10% · Splash Sky 10%. Navy text is never used on dark ground; the navy logo ring becomes Splash Sky; bubbles on dark surfaces are outlined in Midnight. Secondary buttons are transparent with a Splash Sky border; tertiary keeps the Splash Sky fill with Midnight text.
 
 ### Typography
 

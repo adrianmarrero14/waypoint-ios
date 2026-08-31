@@ -73,9 +73,10 @@ public extension Font {
 }
 
 public extension View {
-    /// Brand label treatment: uppercase, wide tracking, Ocean Blue.
+    /// Brand label treatment: uppercase, wide tracking, accent blue
+    /// (Ocean Blue in light mode, Whale Blue in dark mode).
     /// Apply to short labels like "NEW · DAILY SPLASH".
-    func waypointLabelStyle(color: Color = .wpOceanBlue) -> some View {
+    func waypointLabelStyle(color: Color = .wpLabelAccent) -> some View {
         font(.wpLabel)
             .textCase(.uppercase)
             .tracking(1.5)
