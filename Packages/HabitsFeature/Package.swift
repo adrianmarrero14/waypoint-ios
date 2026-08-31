@@ -9,12 +9,16 @@ let package = Package(
         .library(name: "HabitsFeature", targets: ["HabitsFeature"])
     ],
     dependencies: [
-        .package(path: "../WaypointCore")
+        .package(path: "../WaypointCore"),
+        .package(path: "../DesignSystem")
     ],
     targets: [
         .target(
             name: "HabitsFeature",
-            dependencies: ["WaypointCore"],
+            dependencies: [
+                "WaypointCore",
+                .product(name: "DesignSystem", package: "DesignSystem"),
+            ],
             swiftSettings: [.defaultIsolation(MainActor.self)]
         )
     ]

@@ -1,3 +1,4 @@
+import DesignSystem
 import SwiftUI
 import WaypointCore
 
@@ -15,17 +16,26 @@ struct SettingsView: View {
                         )) {
                             Label {
                                 Text(module.name)
+                                    .font(.wpBody)
+                                    .foregroundStyle(Color.wpDeepNavy)
                             } icon: {
                                 Image(systemName: module.systemImage)
+                                    .foregroundStyle(Color.wpOceanBlue)
                             }
                         }
+                        .tint(Color.wpOceanBlue)
                     }
                 } header: {
                     Text("settings.modules.header")
+                        .waypointLabelStyle()
                 } footer: {
                     Text("settings.modules.footer")
+                        .font(.wpCaption)
+                        .foregroundStyle(Color.wpTextTertiary)
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(Color.wpFoam)
             .navigationTitle(Text("settings.tab.title"))
         }
     }

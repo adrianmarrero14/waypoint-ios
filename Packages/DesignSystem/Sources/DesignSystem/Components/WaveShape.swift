@@ -1,17 +1,17 @@
 import SwiftUI
 
-/// The brand's wave motif: a run of smooth quadratic arcs. Use stroked for
-/// decorative lines or filled (closed) as a section divider.
+/// The brand's wave motif: a smooth sinusoid with alternating crests and
+/// troughs. Use stroked for decorative lines or filled (closed) as a divider.
 public struct WaveShape: Shape {
     let wavelength: CGFloat
     let amplitude: CGFloat
     let closed: Bool
 
     /// - Parameters:
-    ///   - wavelength: width of one full arc pair.
-    ///   - amplitude: crest height above the midline.
+    ///   - wavelength: width of one full crest + trough cycle.
+    ///   - amplitude: crest height above the midline (trough dips the same below).
     ///   - closed: when true, closes the path down to the bottom edge so it can be filled.
-    public init(wavelength: CGFloat = 56, amplitude: CGFloat = 16, closed: Bool = false) {
+    public init(wavelength: CGFloat = 90, amplitude: CGFloat = 12, closed: Bool = false) {
         self.wavelength = wavelength
         self.amplitude = amplitude
         self.closed = closed
@@ -23,12 +23,9 @@ public struct WaveShape: Shape {
         path.move(to: CGPoint(x: rect.minX, y: midY))
         var x = rect.minX
         while x < rect.maxX {
-            let next = min(x + wavelength, rect.maxX)
-            path.addQuadCurve(
-                to: CGPoint(x: next, y: midY),
-                control: CGPoint(x: x + wavelength / 2, y: midY - amplitude * 2)
-            )
-            x = next
+            x = min(x + 2, rect.maxX)
+            let y = midY - amplitude * sin((x - rect.minX) / wavelength * 2 * .pi)
+            path.addLine(to: CGPoint(x: x, y: y))
         }
         if closed {
             path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))

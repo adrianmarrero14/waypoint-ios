@@ -1,3 +1,4 @@
+import DesignSystem
 import SwiftUI
 import WaypointCore
 
@@ -23,6 +24,7 @@ struct ContentView: View {
                 Label("settings.tab.title", systemImage: "gearshape")
             }
         }
+        .tint(Color.wpOceanBlue)
     }
 }
 

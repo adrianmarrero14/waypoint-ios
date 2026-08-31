@@ -1,12 +1,13 @@
+import DesignSystem
 import SwiftUI
 
 struct TasksRootView: View {
     var body: some View {
         NavigationStack {
-            ContentUnavailableView(
-                String(localized: "module.tasks.name", bundle: .module),
-                systemImage: "checklist",
-                description: Text("module.tasks.placeholder", bundle: .module)
+            WaypointEmptyState(
+                title: Text("module.tasks.name", bundle: .module),
+                message: Text("module.tasks.placeholder", bundle: .module),
+                systemImage: "checklist"
             )
             .navigationTitle(Text("module.tasks.name", bundle: .module))
         }

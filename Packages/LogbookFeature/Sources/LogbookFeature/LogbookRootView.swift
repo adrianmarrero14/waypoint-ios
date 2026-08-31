@@ -1,12 +1,13 @@
+import DesignSystem
 import SwiftUI
 
 struct LogbookRootView: View {
     var body: some View {
         NavigationStack {
-            ContentUnavailableView(
-                String(localized: "module.logbook.name", bundle: .module),
-                systemImage: "book.closed",
-                description: Text("module.logbook.placeholder", bundle: .module)
+            WaypointEmptyState(
+                title: Text("module.logbook.name", bundle: .module),
+                message: Text("module.logbook.placeholder", bundle: .module),
+                systemImage: "book.closed"
             )
             .navigationTitle(Text("module.logbook.name", bundle: .module))
         }
