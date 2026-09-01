@@ -12,6 +12,7 @@
 		CAFE0000000000000000E002 /* TasksFeature in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE0000000000000000D002 /* TasksFeature */; };
 		CAFE0000000000000000E003 /* WaypointFeature in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE0000000000000000D003 /* WaypointFeature */; };
 		CAFE0000000000000000E004 /* DesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE0000000000000000D004 /* DesignSystem */; };
+		CAFE0000000000000000E005 /* AuthFeature in Frameworks */ = {isa = PBXBuildFile; productRef = CAFE0000000000000000D005 /* AuthFeature */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 				CAFE0000000000000000E002 /* TasksFeature in Frameworks */,
 				CAFE0000000000000000E003 /* WaypointFeature in Frameworks */,
 				CAFE0000000000000000E004 /* DesignSystem in Frameworks */,
+				CAFE0000000000000000E005 /* AuthFeature in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +85,7 @@
 				CAFE0000000000000000D002 /* TasksFeature */,
 				CAFE0000000000000000D003 /* WaypointFeature */,
 				CAFE0000000000000000D004 /* DesignSystem */,
+				CAFE0000000000000000D005 /* AuthFeature */,
 			);
 			productName = waypoint;
 			productReference = 3ADC18023045939F003B729F /* waypoint.app */;
@@ -119,6 +122,7 @@
 				CAFE0000000000000000F002 /* XCLocalSwiftPackageReference "Packages/TasksFeature" */,
 				CAFE0000000000000000F003 /* XCLocalSwiftPackageReference "Packages/WaypointFeature" */,
 				CAFE0000000000000000F004 /* XCLocalSwiftPackageReference "Packages/DesignSystem" */,
+				CAFE0000000000000000F005 /* XCLocalSwiftPackageReference "Packages/AuthFeature" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3ADC18033045939F003B729F /* Products */;
@@ -270,6 +274,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = waypoint/waypoint.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -278,6 +283,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Waypoint uses Face ID to unlock the app.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -315,6 +321,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = waypoint/waypoint.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -323,6 +330,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Waypoint uses Face ID to unlock the app.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -399,12 +407,20 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/DesignSystem;
 		};
+		CAFE0000000000000000F005 /* XCLocalSwiftPackageReference "Packages/AuthFeature" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/AuthFeature;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		CAFE0000000000000000D000 /* WaypointCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = WaypointCore;
+		};
+		CAFE0000000000000000D005 /* AuthFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AuthFeature;
 		};
 		CAFE0000000000000000D001 /* HabitsFeature */ = {
 			isa = XCSwiftPackageProductDependency;
