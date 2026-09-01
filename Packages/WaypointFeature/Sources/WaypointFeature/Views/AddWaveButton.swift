@@ -2,7 +2,7 @@ import DesignSystem
 import SwiftUI
 
 /// Toolbar button that opens the quick-add sheet.
-struct AddEntryButton: View {
+struct AddWaveButton: View {
     let action: () -> Void
 
     var body: some View {
@@ -11,6 +11,6 @@ struct AddEntryButton: View {
                 .font(.system(size: 22))
         }
         .tint(Color.wpLabelAccent)
-        .accessibilityLabel(Text("add.entry.accessibility", bundle: .module))
+        .accessibilityLabel(Text("add.wave.accessibility", bundle: .module))
     }
 }

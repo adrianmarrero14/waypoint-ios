@@ -10,11 +10,23 @@ struct MonthDestination: Hashable {
 }
 
 /// Full-width month cards for the selected year, chronological top to bottom,
-/// each previewing the entries written that month. The header (title + year)
+/// each previewing the waves written that month. The header (title + year)
 /// stays pinned and the list opens focused on the current month.
 struct YearView: View {
-    @Query(sort: \Entry.date) private var entries: [Entry]
+    private let ownerID: UUID?
+    @Query private var waves: [Wave]
     @State private var selectedYear = JournalCalendar.iso.component(.year, from: .now)
+
+    init(ownerID: UUID?) {
+        self.ownerID = ownerID
+        // Hide tombstones; show the current account's waves plus unowned ones.
+        _waves = Query(
+            filter: #Predicate<Wave> {
+                $0.deletedAt == nil && ($0.ownerID == nil || $0.ownerID == ownerID)
+            },
+            sort: \Wave.date
+        )
+    }
 
     private var currentYear: Int {
         JournalCalendar.iso.component(.year, from: .now)
@@ -39,13 +51,13 @@ struct YearView: View {
         selectedYear == currentYear && month > currentMonth
     }
 
-    private var yearEntries: [Entry] {
-        entries.filter { JournalCalendar.iso.component(.year, from: $0.date) == selectedYear }
+    private var yearWaves: [Wave] {
+        waves.filter { JournalCalendar.iso.component(.year, from: $0.date) == selectedYear }
     }
 
-    /// Entries per month (1...12), chronological (the query sorts by date).
-    private var entriesByMonth: [Int: [Entry]] {
-        Dictionary(grouping: yearEntries) {
+    /// Waves per month (1...12), chronological (the query sorts by date).
+    private var wavesByMonth: [Int: [Wave]] {
+        Dictionary(grouping: yearWaves) {
             JournalCalendar.iso.component(.month, from: $0.date)
         }
     }
@@ -56,12 +68,12 @@ struct YearView: View {
                 LazyVStack(spacing: 16) {
                     ForEach(months, id: \.self) { month in
                         NavigationLink(value: MonthDestination(year: selectedYear, month: month)) {
-                            let monthEntries = entriesByMonth[month] ?? []
+                            let monthWaves = wavesByMonth[month] ?? []
                             MonthCard(
                                 year: selectedYear,
                                 month: month,
-                                entryCount: monthEntries.count,
-                                previewEntries: monthEntries,
+                                waveCount: monthWaves.count,
+                                previewWaves: monthWaves,
                                 isUpcoming: isUpcoming(month)
                             )
                         }
@@ -87,7 +99,7 @@ struct YearView: View {
         .background(Color.wpBackground)
         .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(for: MonthDestination.self) { destination in
-            MonthView(year: destination.year, month: destination.month)
+            MonthView(year: destination.year, month: destination.month, ownerID: ownerID)
         }
     }
 
@@ -123,9 +135,11 @@ struct YearView: View {
 }
 
 #Preview {
+    let container = PreviewData.makeContainer()
     NavigationStack {
-        YearView()
+        YearView(ownerID: nil)
             .navigationTitle(Text("module.waypoint.name", bundle: .module))
     }
-    .modelContainer(PreviewData.makeContainer())
+    .modelContainer(container)
+    .environment(PreviewData.makeStore(container: container))
 }

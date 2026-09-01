@@ -3,22 +3,22 @@ import SwiftData
 import SwiftUI
 import WaypointCore
 
-/// Zero-friction entry composer: one multiline text field, date defaults to
-/// today but can be changed, nothing else required. Pass an existing `entry`
+/// Zero-friction wave composer: one multiline text field, date defaults to
+/// today but can be changed, nothing else required. Pass an existing `wave`
 /// to edit it in place instead of creating a new one.
 struct QuickAddView: View {
-    @Environment(\.modelContext) private var modelContext
+    @Environment(WaveStore.self) private var waveStore
     @Environment(\.dismiss) private var dismiss
 
-    private let entry: Entry?
+    private let wave: Wave?
     @State private var text: String
     @State private var date: Date
     @FocusState private var isTextFocused: Bool
 
-    init(initialDate: Date = .now, entry: Entry? = nil) {
-        self.entry = entry
-        _text = State(initialValue: entry?.text ?? "")
-        _date = State(initialValue: entry?.date ?? initialDate)
+    init(initialDate: Date = .now, wave: Wave? = nil) {
+        self.wave = wave
+        _text = State(initialValue: wave?.text ?? "")
+        _date = State(initialValue: wave?.date ?? initialDate)
     }
 
     private var trimmedText: String {
@@ -66,9 +66,9 @@ struct QuickAddView: View {
                     .buttonStyle(.waypointPrimary)
                     .disabled(trimmedText.isEmpty)
 
-                    if entry != nil {
+                    if wave != nil {
                         Button(role: .destructive) {
-                            deleteEntry()
+                            deleteWave()
                         } label: {
                             Text("quickadd.delete", bundle: .module)
                                 .font(.wpBodyBold)
@@ -81,7 +81,7 @@ struct QuickAddView: View {
             .padding(20)
             .background(Color.wpBackground)
             .navigationTitle(
-                entry == nil
+                wave == nil
                     ? Text("quickadd.title", bundle: .module)
                     : Text("quickadd.edit.title", bundle: .module)
             )
@@ -103,25 +103,26 @@ struct QuickAddView: View {
 
     private func save() {
         guard !trimmedText.isEmpty else { return }
-        if let entry {
-            entry.text = trimmedText
-            entry.date = date
+        if let wave {
+            waveStore.update(wave, text: trimmedText, date: date)
         } else {
-            modelContext.insert(Entry(text: trimmedText, date: date, createdAt: .now))
+            waveStore.createWave(text: trimmedText, date: date)
         }
         dismiss()
     }
 
-    private func deleteEntry() {
-        guard let entry else { return }
-        modelContext.delete(entry)
+    private func deleteWave() {
+        guard let wave else { return }
+        waveStore.delete(wave)
         dismiss()
     }
 }
 
 #Preview {
+    let container = PreviewData.makeContainer()
     Color.clear.sheet(isPresented: .constant(true)) {
         QuickAddView()
     }
-    .modelContainer(PreviewData.makeContainer())
+    .modelContainer(container)
+    .environment(PreviewData.makeStore(container: container))
 }

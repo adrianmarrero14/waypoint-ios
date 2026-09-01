@@ -12,6 +12,7 @@ struct waypointApp: App {
     @State private var appLockSettings = AppLockSettings()
     @State private var appLockManager = AppLockManager()
     @State private var sessionStore = SessionStore(config: SupabaseEnvironment.config)
+    @State private var waveStore: WaveStore
     @State private var router: AppRouter
     @State private var notificationScheduler: NotificationScheduler
 
@@ -23,9 +24,8 @@ struct waypointApp: App {
     init() {
         WaypointAppearance.apply()
 
-        let schema = Schema([Entry.self])
-        let localConfig = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
-        container = try! ModelContainer(for: schema, configurations: [localConfig])
+        container = Self.makeContainer()
+        _waveStore = State(initialValue: WaveStore(modelContext: container.mainContext))
 
         let router = AppRouter()
         let scheduler = NotificationScheduler()
@@ -40,6 +40,24 @@ struct waypointApp: App {
         #endif
     }
 
+    /// Pre-release schema policy: if the store on disk predates the current
+    /// schema (e.g. the Entry→Wave rename), delete it and start fresh rather
+    /// than crash. Replace with a versioned migration once real data exists.
+    private static func makeContainer() -> ModelContainer {
+        let schema = Schema([Wave.self])
+        let config = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
+        do {
+            return try ModelContainer(for: schema, configurations: [config])
+        } catch {
+            let storeURL = config.url
+            let fm = FileManager.default
+            for suffix in ["", "-shm", "-wal"] {
+                try? fm.removeItem(at: URL(fileURLWithPath: storeURL.path + suffix))
+            }
+            return try! ModelContainer(for: schema, configurations: [config])
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -51,6 +69,7 @@ struct waypointApp: App {
                 .environment(appLockSettings)
                 .environment(appLockManager)
                 .environment(sessionStore)
+                .environment(waveStore)
                 .task {
                     appLockManager.lockIfEnabled(appLockSettings)
                 }
