@@ -9,9 +9,12 @@ enum SupabaseEnvironment {
     // is a personal (free) one, which cannot sign the applesignin entitlement.
     // With a paid membership: re-add the entitlement in waypoint.entitlements,
     // enable the capability for the App ID, and flip this to true.
+    // supportsSignInWithGoogle is off until the Google provider is configured
+    // in the Supabase dashboard (Google Cloud OAuth client + redirect URLs).
     static let config = SupabaseConfig(
         url: URL(string: "https://kacjuwrmevghlxgyqyco.supabase.co")!,
         anonKey: "sb_publishable_K4Ax80qnpCA2mVSC1w5uxA_Gz73kxWI",
-        supportsSignInWithApple: false
+        supportsSignInWithApple: false,
+        supportsSignInWithGoogle: false
     )
 }

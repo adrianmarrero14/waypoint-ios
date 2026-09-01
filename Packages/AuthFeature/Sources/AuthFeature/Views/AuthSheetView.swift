@@ -54,7 +54,9 @@ public struct AuthSheetView: View {
                     if sessionStore.supportsSignInWithApple {
                         appleButton
                     }
-                    googleButton
+                    if sessionStore.supportsSignInWithGoogle {
+                        googleButton
+                    }
                     NavigationLink {
                         EmailSignInView(errorKey: $errorKey)
                     } label: {
