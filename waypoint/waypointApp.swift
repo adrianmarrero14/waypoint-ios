@@ -11,8 +11,9 @@ struct waypointApp: App {
     @State private var appearanceSettings = AppearanceSettings()
     @State private var appLockSettings = AppLockSettings()
     @State private var appLockManager = AppLockManager()
-    @State private var sessionStore = SessionStore(config: SupabaseEnvironment.config)
+    @State private var sessionStore: SessionStore
     @State private var waveStore: WaveStore
+    @State private var syncEngine: SyncEngine
     @State private var router: AppRouter
     @State private var notificationScheduler: NotificationScheduler
 
@@ -25,7 +26,18 @@ struct waypointApp: App {
         WaypointAppearance.apply()
 
         container = Self.makeContainer()
-        _waveStore = State(initialValue: WaveStore(modelContext: container.mainContext))
+        let sessionStore = SessionStore(config: SupabaseEnvironment.config)
+        let waveStore = WaveStore(modelContext: container.mainContext)
+        let syncEngine = SyncEngine(
+            sessionStore: sessionStore,
+            waveStore: waveStore,
+            config: SupabaseEnvironment.config,
+            modelContext: container.mainContext
+        )
+        waveStore.onLocalChange = { syncEngine.scheduleSync() }
+        _sessionStore = State(initialValue: sessionStore)
+        _waveStore = State(initialValue: waveStore)
+        _syncEngine = State(initialValue: syncEngine)
 
         let router = AppRouter()
         let scheduler = NotificationScheduler()
@@ -70,16 +82,36 @@ struct waypointApp: App {
                 .environment(appLockManager)
                 .environment(sessionStore)
                 .environment(waveStore)
+                .environment(syncEngine)
                 .task {
                     appLockManager.lockIfEnabled(appLockSettings)
                 }
         }
         .modelContainer(container)
+        .onChange(of: sessionStore.state, initial: true) { oldState, newState in
+            switch newState {
+            case .signedIn(let user):
+                waveStore.setCurrentUser(user.id)
+                // Only a genuine account change triggers adoption + full sync;
+                // token refreshes re-emit the same user and must not.
+                if oldState.user?.id != user.id {
+                    Task { await syncEngine.handleSignIn(user) }
+                }
+            case .signedOut:
+                waveStore.setCurrentUser(nil)
+            case .unknown:
+                break
+            }
+        }
         .onChange(of: scenePhase) { _, phase in
             if phase == .background {
                 appLockManager.lockIfEnabled(appLockSettings)
             }
             guard phase == .active else { return }
+            Task {
+                await syncEngine.syncNow()
+                waveStore.purgeSyncedTombstones()
+            }
             Task {
                 await notificationScheduler.refreshAuthorizationStatus()
                 guard notificationScheduler.isAuthorized else { return }

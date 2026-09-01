@@ -21,7 +21,8 @@ public final class SessionStore: SessionProviding {
     /// Whether the UI should offer Sign In with Google (see SupabaseConfig).
     public var supportsSignInWithGoogle: Bool { config.supportsSignInWithGoogle }
 
-    private let client: AuthClient
+    /// Internal so SyncEngine (same module) can read fresh session tokens.
+    let client: AuthClient
     private let config: SupabaseConfig
     @ObservationIgnored private var observationTask: Task<Void, Never>?
 
