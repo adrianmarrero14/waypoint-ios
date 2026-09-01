@@ -1,3 +1,4 @@
+import AuthFeature
 import DesignSystem
 import SwiftData
 import SwiftUI
@@ -8,6 +9,9 @@ struct waypointApp: App {
     @State private var moduleSettings = ModuleSettings()
     @State private var languageSettings = LanguageSettings()
     @State private var appearanceSettings = AppearanceSettings()
+    @State private var appLockSettings = AppLockSettings()
+    @State private var appLockManager = AppLockManager()
+    @State private var sessionStore = SessionStore(config: SupabaseEnvironment.config)
     @State private var router: AppRouter
     @State private var notificationScheduler: NotificationScheduler
 
@@ -44,9 +48,18 @@ struct waypointApp: App {
                 .environment(appearanceSettings)
                 .environment(router)
                 .environment(notificationScheduler)
+                .environment(appLockSettings)
+                .environment(appLockManager)
+                .environment(sessionStore)
+                .task {
+                    appLockManager.lockIfEnabled(appLockSettings)
+                }
         }
         .modelContainer(container)
         .onChange(of: scenePhase) { _, phase in
+            if phase == .background {
+                appLockManager.lockIfEnabled(appLockSettings)
+            }
             guard phase == .active else { return }
             Task {
                 await notificationScheduler.refreshAuthorizationStatus()
