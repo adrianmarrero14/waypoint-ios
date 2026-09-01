@@ -9,6 +9,9 @@ public struct AccountSectionView: View {
 
     @State private var isAuthSheetPresented = false
     @State private var isSignOutConfirmationPresented = false
+    @State private var isDeleteConfirmationPresented = false
+    @State private var isDeletingAccount = false
+    @State private var deleteFailed = false
 
     public init() {}
 
@@ -74,6 +77,57 @@ public struct AccountSectionView: View {
                 Task { try? await sessionStore.signOut() }
             } label: {
                 Text("auth.account.signOut", bundle: .module)
+            }
+        }
+
+        Button {
+            isDeleteConfirmationPresented = true
+        } label: {
+            Label {
+                Text("auth.account.delete", bundle: .module)
+                    .font(.wpBody)
+                    .foregroundStyle(.red)
+            } icon: {
+                if isDeletingAccount {
+                    ProgressView()
+                } else {
+                    Image(systemName: "trash")
+                        .foregroundStyle(.red)
+                }
+            }
+        }
+        .disabled(isDeletingAccount)
+        .confirmationDialog(
+            Text("auth.account.delete.confirmTitle", bundle: .module),
+            isPresented: $isDeleteConfirmationPresented,
+            titleVisibility: .visible
+        ) {
+            Button(role: .destructive) {
+                deleteAccount()
+            } label: {
+                Text("auth.account.delete", bundle: .module)
+            }
+        } message: {
+            Text("auth.account.delete.confirmMessage", bundle: .module)
+        }
+        .alert(
+            Text("auth.account.delete.failed", bundle: .module),
+            isPresented: $deleteFailed
+        ) {
+            Button(role: .cancel) {} label: {
+                Text("auth.account.delete.failedDismiss", bundle: .module)
+            }
+        }
+    }
+
+    private func deleteAccount() {
+        isDeletingAccount = true
+        Task {
+            defer { isDeletingAccount = false }
+            do {
+                try await sessionStore.deleteAccount()
+            } catch {
+                deleteFailed = true
             }
         }
     }

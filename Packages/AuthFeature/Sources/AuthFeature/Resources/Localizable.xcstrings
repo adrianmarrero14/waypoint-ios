@@ -1,6 +1,91 @@
 {
   "sourceLanguage" : "es",
   "strings" : {
+    "auth.account.delete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete account"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar cuenta"
+          }
+        }
+      }
+    },
+    "auth.account.delete.confirmMessage" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This permanently deletes your account. This action cannot be undone."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esto elimina tu cuenta de forma permanente. Esta acción no se puede deshacer."
+          }
+        }
+      }
+    },
+    "auth.account.delete.confirmTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete your account?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Eliminar tu cuenta?"
+          }
+        }
+      }
+    },
+    "auth.account.delete.failed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not delete the account. Please try again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo eliminar la cuenta. Inténtalo de nuevo."
+          }
+        }
+      }
+    },
+    "auth.account.delete.failedDismiss" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vale"
+          }
+        }
+      }
+    },
     "auth.account.noEmail" : {
       "extractionState" : "manual",
       "localizations" : {

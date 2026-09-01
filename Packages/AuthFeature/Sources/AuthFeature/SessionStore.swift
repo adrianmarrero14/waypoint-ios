@@ -16,9 +16,11 @@ public final class SessionStore: SessionProviding {
     public private(set) var state: SessionState = .unknown
 
     private let client: AuthClient
+    private let config: SupabaseConfig
     @ObservationIgnored private var observationTask: Task<Void, Never>?
 
     public init(config: SupabaseConfig) {
+        self.config = config
         client = AuthClient(
             url: config.url.appendingPathComponent("auth/v1"),
             headers: ["apikey": config.anonKey],
@@ -105,5 +107,30 @@ public final class SessionStore: SessionProviding {
 
     public func signOut() async throws {
         try await client.signOut()
+    }
+
+    // MARK: - Account deletion
+
+    /// Calls the `delete-user` Edge Function, which verifies the caller's JWT
+    /// and deletes the account server-side, then clears the local session.
+    public func deleteAccount() async throws {
+        let session = try await client.session
+
+        var request = URLRequest(
+            url: config.url.appendingPathComponent("functions/v1/delete-user")
+        )
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue(config.anonKey, forHTTPHeaderField: "apikey")
+
+        let (_, response) = try await URLSession.shared.data(for: request)
+        guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
+            throw URLError(.badServerResponse)
+        }
+
+        // The server-side sign-out is expected to fail (the user is gone);
+        // what matters is dropping the local session.
+        try? await client.signOut()
+        state = .signedOut
     }
 }
