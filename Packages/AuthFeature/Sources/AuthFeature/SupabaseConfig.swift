@@ -6,8 +6,13 @@ public struct SupabaseConfig: Sendable {
     public let url: URL
     public let anonKey: String
 
-    public init(url: URL, anonKey: String) {
+    /// Sign In with Apple needs the applesignin entitlement, which only paid
+    /// Apple Developer teams can sign. False hides the Apple button entirely.
+    public let supportsSignInWithApple: Bool
+
+    public init(url: URL, anonKey: String, supportsSignInWithApple: Bool = true) {
         self.url = url
         self.anonKey = anonKey
+        self.supportsSignInWithApple = supportsSignInWithApple
     }
 }

@@ -51,7 +51,9 @@ public struct AuthSheetView: View {
                 Spacer()
 
                 VStack(spacing: 12) {
-                    appleButton
+                    if sessionStore.supportsSignInWithApple {
+                        appleButton
+                    }
                     googleButton
                     NavigationLink {
                         EmailSignInView(errorKey: $errorKey)

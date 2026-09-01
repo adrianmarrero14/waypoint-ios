@@ -15,6 +15,9 @@ public final class SessionStore: SessionProviding {
 
     public private(set) var state: SessionState = .unknown
 
+    /// Whether the UI should offer Sign In with Apple (see SupabaseConfig).
+    public var supportsSignInWithApple: Bool { config.supportsSignInWithApple }
+
     private let client: AuthClient
     private let config: SupabaseConfig
     @ObservationIgnored private var observationTask: Task<Void, Never>?
