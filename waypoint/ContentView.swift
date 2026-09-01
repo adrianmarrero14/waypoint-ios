@@ -1,4 +1,6 @@
+import AuthFeature
 import DesignSystem
+import SwiftData
 import SwiftUI
 import WaypointCore
 
@@ -8,6 +10,7 @@ struct ContentView: View {
     @Environment(AppearanceSettings.self) private var appearanceSettings
     @Environment(AppRouter.self) private var router
     @Environment(NotificationScheduler.self) private var notificationScheduler
+    @Environment(AppLockManager.self) private var appLockManager
 
     @AppStorage("waypoint.hasSeenNotificationOnboarding")
     private var hasSeenNotificationOnboarding = false
@@ -30,6 +33,11 @@ struct ContentView: View {
                 SettingsView()
             } label: {
                 Label("settings.tab.title", systemImage: "gearshape")
+            }
+        }
+        .overlay {
+            if appLockManager.isLocked {
+                AppLockView()
             }
         }
         .tint(Color.wpOceanBlue)
@@ -66,4 +74,11 @@ struct ContentView: View {
         .environment(AppearanceSettings())
         .environment(AppRouter())
         .environment(NotificationScheduler())
+        .environment(AppLockSettings())
+        .environment(AppLockManager())
+        .environment(SessionStore(config: SupabaseEnvironment.config))
+        .environment(WaveStore(modelContext: ModelContext(try! ModelContainer(
+            for: Wave.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+        ))))
 }

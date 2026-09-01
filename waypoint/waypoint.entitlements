@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Sign In with Apple requires a paid Apple Developer membership; personal
+	     teams cannot sign the com.apple.developer.applesignin entitlement.
+	     When the membership exists, re-add:
+	       com.apple.developer.applesignin = [Default]
+	     and flip supportsSignInWithApple in SupabaseEnvironment.swift. -->
+	<!-- Outgoing network for Supabase when running sandboxed on macOS. -->
+	<key>com.apple.security.network.client</key>
+	<true/>
+</dict>
+</plist>
