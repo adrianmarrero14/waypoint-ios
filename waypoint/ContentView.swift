@@ -1,5 +1,6 @@
 import AuthFeature
 import DesignSystem
+import SwiftData
 import SwiftUI
 import WaypointCore
 
@@ -76,4 +77,8 @@ struct ContentView: View {
         .environment(AppLockSettings())
         .environment(AppLockManager())
         .environment(SessionStore(config: SupabaseEnvironment.config))
+        .environment(WaveStore(modelContext: ModelContext(try! ModelContainer(
+            for: Wave.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+        ))))
 }

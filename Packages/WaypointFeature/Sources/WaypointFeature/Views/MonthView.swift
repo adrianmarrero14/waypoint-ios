@@ -3,26 +3,30 @@ import SwiftData
 import SwiftUI
 import WaypointCore
 
-/// Entries of one month, grouped into a section per ISO week.
+/// Waves of one month, grouped into a section per ISO week.
 struct MonthView: View {
     let year: Int
     let month: Int
 
-    @Environment(\.modelContext) private var modelContext
-    @Query private var entries: [Entry]
+    @Environment(WaveStore.self) private var waveStore
+    @Query private var waves: [Wave]
     @State private var isQuickAddPresented = false
-    @State private var entryToEdit: Entry?
+    @State private var waveToEdit: Wave?
 
-    init(year: Int, month: Int) {
+    init(year: Int, month: Int, ownerID: UUID?) {
         self.year = year
         self.month = month
         let interval = JournalCalendar.monthInterval(year: year, month: month)
         // #Predicate cannot call Calendar — capture plain Date bounds.
         let start = interval?.start ?? .distantPast
         let end = interval?.end ?? .distantFuture
-        _entries = Query(
-            filter: #Predicate<Entry> { $0.date >= start && $0.date < end },
-            sort: \Entry.date
+        _waves = Query(
+            filter: #Predicate<Wave> {
+                $0.date >= start && $0.date < end
+                    && $0.deletedAt == nil
+                    && ($0.ownerID == nil || $0.ownerID == ownerID)
+            },
+            sort: \Wave.date
         )
     }
 
@@ -30,15 +34,15 @@ struct MonthView: View {
         JournalCalendar.monthInterval(year: year, month: month)?.start ?? .now
     }
 
-    private var weekGroups: [(key: WeekKey, entries: [Entry])] {
-        Dictionary(grouping: entries) { WeekKey(date: $0.date) }
+    private var weekGroups: [(key: WeekKey, waves: [Wave])] {
+        Dictionary(grouping: waves) { WeekKey(date: $0.date) }
             .sorted { $0.key < $1.key }
-            .map { (key: $0.key, entries: $0.value) }
+            .map { (key: $0.key, waves: $0.value) }
     }
 
     var body: some View {
         Group {
-            if entries.isEmpty {
+            if waves.isEmpty {
                 WaypointEmptyState(
                     title: Text("month.empty.title", bundle: .module),
                     message: Text("month.empty.message", bundle: .module),
@@ -48,17 +52,17 @@ struct MonthView: View {
                 List {
                     ForEach(weekGroups, id: \.key) { group in
                         Section {
-                            ForEach(group.entries) { entry in
+                            ForEach(group.waves) { wave in
                                 Button {
-                                    entryToEdit = entry
+                                    waveToEdit = wave
                                 } label: {
-                                    EntryRow(entry: entry)
+                                    WaveRow(wave: wave)
                                 }
                                 .buttonStyle(.plain)
                             }
                             .onDelete { offsets in
                                 for offset in offsets {
-                                    modelContext.delete(group.entries[offset])
+                                    waveStore.delete(group.waves[offset])
                                 }
                             }
                         } header: {
@@ -74,14 +78,14 @@ struct MonthView: View {
         .navigationTitle(monthStart.formatted(.dateTime.month(.wide).year()))
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                AddEntryButton { isQuickAddPresented = true }
+                AddWaveButton { isQuickAddPresented = true }
             }
         }
         .sheet(isPresented: $isQuickAddPresented) {
             QuickAddView(initialDate: defaultQuickAddDate)
         }
-        .sheet(item: $entryToEdit) { entry in
-            QuickAddView(entry: entry)
+        .sheet(item: $waveToEdit) { wave in
+            QuickAddView(wave: wave)
         }
     }
 
@@ -120,15 +124,15 @@ private struct WeekHeader: View {
     }
 }
 
-private struct EntryRow: View {
-    let entry: Entry
+private struct WaveRow: View {
+    let wave: Wave
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(entry.text)
+            Text(wave.text)
                 .font(.wpBody)
                 .foregroundStyle(Color.wpTextPrimary)
-            Text(entry.date.formatted(.dateTime.weekday(.wide).day()))
+            Text(wave.date.formatted(.dateTime.weekday(.wide).day()))
                 .font(.wpCaption)
                 .foregroundStyle(Color.wpTextTertiary)
         }
@@ -137,11 +141,14 @@ private struct EntryRow: View {
 }
 
 #Preview {
+    let container = PreviewData.makeContainer()
     NavigationStack {
         MonthView(
             year: JournalCalendar.iso.component(.year, from: .now),
-            month: JournalCalendar.iso.component(.month, from: .now)
+            month: JournalCalendar.iso.component(.month, from: .now),
+            ownerID: nil
         )
     }
-    .modelContainer(PreviewData.makeContainer())
+    .modelContainer(container)
+    .environment(PreviewData.makeStore(container: container))
 }

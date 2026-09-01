@@ -20,6 +20,7 @@ let package = Package(
                 "WaypointCore",
                 .product(name: "DesignSystem", package: "DesignSystem"),
                 .product(name: "Auth", package: "supabase-swift"),
+                .product(name: "PostgREST", package: "supabase-swift"),
             ],
             resources: [.process("Resources")],
             swiftSettings: [.defaultIsolation(MainActor.self)]

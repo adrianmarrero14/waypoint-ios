@@ -2,13 +2,13 @@ import DesignSystem
 import SwiftUI
 import WaypointCore
 
-/// One month in the year list: name, entry count and a preview of the first
-/// entries written that month.
+/// One month in the year list: name, wave count and a preview of the first
+/// waves written that month.
 struct MonthCard: View {
     let year: Int
     let month: Int
-    let entryCount: Int
-    let previewEntries: [Entry]
+    let waveCount: Int
+    let previewWaves: [Wave]
     /// Future month peeking at the bottom of the list: bold name, dimmed card.
     var isUpcoming = false
 
@@ -25,17 +25,17 @@ struct MonthCard: View {
                     .foregroundStyle(Color.wpTextPrimary)
                 Spacer()
                 if !isUpcoming {
-                    Text("month.entries.count \(entryCount)", bundle: .module)
+                    Text("month.waves.count \(waveCount)", bundle: .module)
                         .font(.wpCaption)
-                        .foregroundStyle(entryCount > 0 ? Color.wpLabelAccent : Color.wpTextTertiary)
+                        .foregroundStyle(waveCount > 0 ? Color.wpLabelAccent : Color.wpTextTertiary)
                 }
             }
-            if !previewEntries.isEmpty {
+            if !previewWaves.isEmpty {
                 VStack(alignment: .leading, spacing: 6) {
-                    ForEach(previewEntries) { entry in
+                    ForEach(previewWaves) { wave in
                         HStack(spacing: 8) {
                             Bubble(diameter: 8)
-                            Text(entry.text)
+                            Text(wave.text)
                                 .font(.wpCaption)
                                 .foregroundStyle(Color.wpTextSecondary)
                                 .lineLimit(1)

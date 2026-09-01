@@ -11,7 +11,9 @@ struct waypointApp: App {
     @State private var appearanceSettings = AppearanceSettings()
     @State private var appLockSettings = AppLockSettings()
     @State private var appLockManager = AppLockManager()
-    @State private var sessionStore = SessionStore(config: SupabaseEnvironment.config)
+    @State private var sessionStore: SessionStore
+    @State private var waveStore: WaveStore
+    @State private var syncEngine: SyncEngine
     @State private var router: AppRouter
     @State private var notificationScheduler: NotificationScheduler
 
@@ -23,9 +25,19 @@ struct waypointApp: App {
     init() {
         WaypointAppearance.apply()
 
-        let schema = Schema([Entry.self])
-        let localConfig = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
-        container = try! ModelContainer(for: schema, configurations: [localConfig])
+        container = Self.makeContainer()
+        let sessionStore = SessionStore(config: SupabaseEnvironment.config)
+        let waveStore = WaveStore(modelContext: container.mainContext)
+        let syncEngine = SyncEngine(
+            sessionStore: sessionStore,
+            waveStore: waveStore,
+            config: SupabaseEnvironment.config,
+            modelContext: container.mainContext
+        )
+        waveStore.onLocalChange = { syncEngine.scheduleSync() }
+        _sessionStore = State(initialValue: sessionStore)
+        _waveStore = State(initialValue: waveStore)
+        _syncEngine = State(initialValue: syncEngine)
 
         let router = AppRouter()
         let scheduler = NotificationScheduler()
@@ -40,6 +52,24 @@ struct waypointApp: App {
         #endif
     }
 
+    /// Pre-release schema policy: if the store on disk predates the current
+    /// schema (e.g. the Entry→Wave rename), delete it and start fresh rather
+    /// than crash. Replace with a versioned migration once real data exists.
+    private static func makeContainer() -> ModelContainer {
+        let schema = Schema([Wave.self])
+        let config = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
+        do {
+            return try ModelContainer(for: schema, configurations: [config])
+        } catch {
+            let storeURL = config.url
+            let fm = FileManager.default
+            for suffix in ["", "-shm", "-wal"] {
+                try? fm.removeItem(at: URL(fileURLWithPath: storeURL.path + suffix))
+            }
+            return try! ModelContainer(for: schema, configurations: [config])
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -51,16 +81,37 @@ struct waypointApp: App {
                 .environment(appLockSettings)
                 .environment(appLockManager)
                 .environment(sessionStore)
+                .environment(waveStore)
+                .environment(syncEngine)
                 .task {
                     appLockManager.lockIfEnabled(appLockSettings)
                 }
         }
         .modelContainer(container)
+        .onChange(of: sessionStore.state, initial: true) { oldState, newState in
+            switch newState {
+            case .signedIn(let user):
+                waveStore.setCurrentUser(user.id)
+                // Only a genuine account change triggers adoption + full sync;
+                // token refreshes re-emit the same user and must not.
+                if oldState.user?.id != user.id {
+                    Task { await syncEngine.handleSignIn(user) }
+                }
+            case .signedOut:
+                waveStore.setCurrentUser(nil)
+            case .unknown:
+                break
+            }
+        }
         .onChange(of: scenePhase) { _, phase in
             if phase == .background {
                 appLockManager.lockIfEnabled(appLockSettings)
             }
             guard phase == .active else { return }
+            Task {
+                await syncEngine.syncNow()
+                waveStore.purgeSyncedTombstones()
+            }
             Task {
                 await notificationScheduler.refreshAuthorizationStatus()
                 guard notificationScheduler.isAuthorized else { return }
